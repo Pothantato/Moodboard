@@ -1,82 +1,78 @@
-import React, { useState, useCallback, useRef } from "react"
+import React, { useState, useCallback } from "react"
 import { useDropzone } from "react-dropzone"
 import { Stage, Layer } from 'react-konva'
-
 import SlikaComponent from "./SlikaComponent"
 
 function Board() {
-  const [slike, setSlike] = useState([])
+  const [images, setImages] = useState([])
   const [selectedId, setSelectedId] = useState(null)
-  const stageRef = useRef()
 
   const onDrop = useCallback((acceptedFiles) => {
     acceptedFiles.forEach((file) => {
       const reader = new FileReader()
+
       reader.onload = () => {
-        setSlike(prev => [
-          ...prev,
-          {
-            id: `img-${Date.now()}-${Math.random()}`,
-            src: reader.result,
-            x: 50,
-            y: 50,
-          }
-        ])
+        setImages(prev => [...prev, {
+          id: `img-${Date.now()}-${Math.random()}`,
+          src: reader.result,  
+          x: 50,               
+          y: 50,
+          width: 200,          
+          height: 200,
+        }])
       }
-      reader.readAsDataURL(file)
+
+      reader.readAsDataURL(file) 
     })
   }, [])
 
   const { getRootProps, getInputProps, isDragActive } = useDropzone({
     onDrop,
-    noClick: false,
-    accept: { 'image/*': [] }
+    noClick: true,
+    accept: { 'image/*': [] }  
   })
 
-  const deselect = (e) => {
-    // Deselect when clicking on empty stage area
-    if (e.target === e.target.getStage()) {
-      setSelectedId(null)
-    }
+  function updateImage(id, newProps) {
+    setImages(prev =>
+      prev.map(img => img.id === id ? { ...img, ...newProps } : img)
+    )
+  }
+
+  function handleStageClick(e) {
+    if (e.target === e.target.getStage()) setSelectedId(null)
   }
 
   return (
     <div
       {...getRootProps()}
       style={{
-        border: isDragActive ? '2px dashed #4a90e2' : '2px dashed #ccc',
-        padding: '20px',
-        textAlign: 'center',
         width: '100vw',
         height: '100vh',
+        border: isDragActive ? '3px dashed blue' : '3px dashed #ccc',
         boxSizing: 'border-box',
-        background: isDragActive ? '#f0f7ff' : '#fff'
       }}
     >
       <input {...getInputProps()} />
-      {slike.length === 0 && (
-        <p style={{ color: '#aaa', pointerEvents: 'none' }}>
-          Drop images here to build your moodboard
+
+      {images.length === 0 && (
+        <p style={{ textAlign: 'center', color: '#aaa', pointerEvents: 'none' }}>
+          Drop images here
         </p>
       )}
+
       <Stage
-        ref={stageRef}
         width={window.innerWidth}
         height={window.innerHeight}
-        onMouseDown={deselect}
+        onMouseDown={handleStageClick}
       >
         <Layer>
-          {slike.map((slika) => (
+          {images.map(img => (
             <SlikaComponent
-              key={slika.id}
-              imageProps={slika}
-              isSelected={slika.id === selectedId}
-              onSelect={() => setSelectedId(slika.id)}
-              onChange={(newAttrs) => {
-                setSlike(prev =>
-                  prev.map(s => s.id === slika.id ? { ...s, ...newAttrs } : s)
-                )
-              }}
+              key={img.id}
+              image={img}
+              isSelected={img.id === selectedId}
+              onSelect={() => setSelectedId(img.id)}
+              onUpdate={(newProps) => updateImage(img.id, newProps)}
             />
           ))}
         </Layer>

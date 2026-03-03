@@ -1,57 +1,66 @@
-import React, { useEffect, useRef } from 'react'
+import React, { useRef, useEffect } from 'react'
 import { Image, Transformer } from 'react-konva'
 import useImage from 'use-image'
 
-function SlikaComponent({ imageProps, isSelected, onSelect, onChange }) {
-  const [img] = useImage(imageProps.src)
-  const shapeRef = useRef()
-  const transformerRef = useRef()
+function SlikaComponent({ image, isSelected, onSelect, onUpdate }) {
+  const [loadedImage] = useImage(image.src)
+
+  const imageRef = useRef()       
+  const transformerRef = useRef() 
 
   useEffect(() => {
-    if (isSelected && transformerRef.current && shapeRef.current) {
-      transformerRef.current.nodes([shapeRef.current])
+    if (isSelected) {
+      transformerRef.current.nodes([imageRef.current])
       transformerRef.current.getLayer().batchDraw()
     }
   }, [isSelected])
 
+  function handleDragEnd(e) {
+    onUpdate({
+      x: e.target.x(),
+      y: e.target.y(),
+    })
+  }
+
+  function handleTransformEnd() {
+    const node = imageRef.current
+
+    const newWidth = node.width() * node.scaleX()
+    const newHeight = node.height() * node.scaleY()
+
+    node.scaleX(1)
+    node.scaleY(1)
+
+    onUpdate({
+      x: node.x(),
+      y: node.y(),
+      width: newWidth,
+      height: newHeight,
+    })
+  }
+
   return (
     <>
       <Image
-        ref={shapeRef}
-        image={img}
-        x={imageProps.x}
-        y={imageProps.y}
-        width={img ? img.width : undefined}
-        height={img ? img.height : undefined}
+        ref={imageRef}
+        image={loadedImage}
+        x={image.x}
+        y={image.y}
+        width={image.width}    
+        height={image.height}  
         draggable
         onClick={onSelect}
         onTap={onSelect}
-        onDragEnd={(e) => {
-          onChange({
-            x: e.target.x(),
-            y: e.target.y(),
-          })
-        }}
-        onTransformEnd={() => {
-          const node = shapeRef.current
-          const scaleX = node.scaleX()
-          const scaleY = node.scaleY()
-          node.scaleX(1)
-          node.scaleY(1)
-          onChange({
-            x: node.x(),
-            y: node.y(),
-            width: Math.max(5, node.width() * scaleX),
-            height: Math.max(5, node.height() * scaleY),
-          })
-        }}
+        onDragEnd={handleDragEnd}
+        onTransformEnd={handleTransformEnd}
       />
       {isSelected && (
         <Transformer
           ref={transformerRef}
-          boundBoxFunc={(oldBox, newBox) =>
-            newBox.width < 5 || newBox.height < 5 ? oldBox : newBox
-          }
+          boundBoxFunc={(oldBox, newBox) => {
+            if (newBox.width < 20 || newBox.height < 20) return oldBox
+            return newBox
+          }}
         />
       )}
     </>
