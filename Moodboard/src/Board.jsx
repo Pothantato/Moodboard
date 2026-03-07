@@ -1,35 +1,37 @@
 import React, { useState, useCallback } from "react"
 import { useDropzone } from "react-dropzone"
 import { Stage, Layer } from 'react-konva'
-import SlikaComponent from "./SlikaComponent"
 
-function Board() {
+import SlikaComponent from "./SlikaComponent"
+import TextComponent from "./TextComponent"
+import "./css/Board.css"
+
+function Board({ activeTool, setActiveTool }) {
   const [images, setImages] = useState([])
+  const [texts, setTexts] = useState([])
   const [selectedId, setSelectedId] = useState(null)
 
   const onDrop = useCallback((acceptedFiles) => {
     acceptedFiles.forEach((file) => {
       const reader = new FileReader()
-
       reader.onload = () => {
         setImages(prev => [...prev, {
           id: `img-${Date.now()}-${Math.random()}`,
-          src: reader.result,  
-          x: 50,               
+          src: reader.result,
+          x: 50,
           y: 50,
-          width: 200,          
+          width: 200,
           height: 200,
         }])
       }
-
-      reader.readAsDataURL(file) 
+      reader.readAsDataURL(file)
     })
   }, [])
 
   const { getRootProps, getInputProps, isDragActive } = useDropzone({
     onDrop,
     noClick: true,
-    accept: { 'image/*': [] }  
+    accept: { 'image/*': [] }
   })
 
   function updateImage(id, newProps) {
@@ -38,27 +40,33 @@ function Board() {
     )
   }
 
+  function updateText(id, newProps) {
+    setTexts(prev =>
+      prev.map(txt => txt.id === id ? { ...txt, ...newProps } : txt)
+    )
+  }
+
   function handleStageClick(e) {
-    if (e.target === e.target.getStage()) setSelectedId(null)
+    const isStage = e.target === e.target.getStage()
+
+    if (activeTool === "text" && isStage) {
+      const pos = e.target.getStage().getPointerPosition()
+      setTexts(prev => [...prev, {
+        id: `txt-${Date.now()}-${Math.random()}`,
+        x: pos.x,
+        y: pos.y,
+        text: "",
+        fontSize: 20,
+      }])
+      return
+    }
+
+    if (isStage) setSelectedId(null)
   }
 
   return (
-    <div
-      {...getRootProps()}
-      style={{
-        width: '100vw',
-        height: '100vh',
-        border: isDragActive ? '3px dashed blue' : '3px dashed #ccc',
-        boxSizing: 'border-box',
-      }}
-    >
+    <div className="BoardMain" {...getRootProps()}>
       <input {...getInputProps()} />
-
-      {images.length === 0 && (
-        <p style={{ textAlign: 'center', color: '#aaa', pointerEvents: 'none' }}>
-          Drop images here
-        </p>
-      )}
 
       <Stage
         width={window.innerWidth}
@@ -73,6 +81,17 @@ function Board() {
               isSelected={img.id === selectedId}
               onSelect={() => setSelectedId(img.id)}
               onUpdate={(newProps) => updateImage(img.id, newProps)}
+            />
+          ))}
+
+          {texts.map(txt => (
+            <TextComponent
+              key={txt.id}
+              textProps={txt}
+              isSelected={txt.id === selectedId}
+              onSelect={() => setSelectedId(txt.id)}
+              onUpdate={(newProps) => updateText(txt.id, newProps)}
+              setActiveTool={setActiveTool}
             />
           ))}
         </Layer>
