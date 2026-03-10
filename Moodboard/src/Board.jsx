@@ -1,12 +1,15 @@
-import React, { useState, useCallback } from "react"
+import React, { useCallback, useEffect, useState } from "react"
 import { useDropzone } from "react-dropzone"
 import { Stage, Layer } from 'react-konva'
+import OprVrstica from "./oprVrstica"
 
 import SlikaComponent from "./SlikaComponent"
 import TextComponent from "./TextComponent"
 import "./css/Board.css"
 
-function Board({ activeTool, setActiveTool }) {
+function Board() {
+
+  const [activeTool, setActiveTool] = useState("pointer")
   const [images, setImages] = useState([])
   const [texts, setTexts] = useState([])
   const [selectedId, setSelectedId] = useState(null)
@@ -28,7 +31,7 @@ function Board({ activeTool, setActiveTool }) {
     })
   }, [])
 
-  const { getRootProps, getInputProps, isDragActive } = useDropzone({
+  const { getRootProps, getInputProps, open} = useDropzone({
     onDrop,
     noClick: true,
     accept: { 'image/*': [] }
@@ -64,8 +67,25 @@ function Board({ activeTool, setActiveTool }) {
     if (isStage) setSelectedId(null)
   }
 
+    function zbrisi() {
+    setImages(prev => prev.filter(img => img.id !== selectedId))
+    setTexts(prev => prev.filter(txt => txt.id !== selectedId))
+    setSelectedId(null)
+  }
+
+  useEffect(() => {
+    function handleKeyDown(e) {
+      if (e.key !== "Delete" && e.key !== "Backspace") return
+      if (document.activeElement.tagName === "TEXTAREA") return
+      zbrisi()
+    }
+
+    window.addEventListener("keydown", handleKeyDown)
+    return () => window.removeEventListener("keydown", handleKeyDown)
+  }, [selectedId])
+
   return (
-    <div className="BoardMain" {...getRootProps()}>
+    <div className="BoardMain" {...getRootProps()} data-tool={activeTool}>
       <input {...getInputProps()} />
 
       <Stage
@@ -81,6 +101,7 @@ function Board({ activeTool, setActiveTool }) {
               isSelected={img.id === selectedId}
               onSelect={() => setSelectedId(img.id)}
               onUpdate={(newProps) => updateImage(img.id, newProps)}
+              activeTool={activeTool}
             />
           ))}
 
@@ -96,6 +117,15 @@ function Board({ activeTool, setActiveTool }) {
           ))}
         </Layer>
       </Stage>
+      <OprVrstica
+      activeTool={activeTool}
+      setActiveTool={setActiveTool}
+      zbrisi={zbrisi}         
+      selectedId={selectedId}
+      images={images}         
+      setImages={setImages}
+      open={open}
+      />
     </div>
   )
 }

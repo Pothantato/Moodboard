@@ -1,14 +1,15 @@
 import puscica from "/arrow-pointer.png"
 import naloziBtn from "/upload.png"
+import brisiBtn from "/trash-can.png"
 import "./css/oprVrstica.css"
 
-function OprVrstica({ activeTool, setActiveTool }) {
+function OprVrstica({ activeTool, setActiveTool, zbrisi, selectedId, open}) {
   return (
     <div className="vrstMain">
       <button
         className="arrow"
         onClick={() => setActiveTool("pointer")}
-        style={{ opacity: activeTool === "pointer" ? 1 : 0.4 }}
+        style={{ opacity: activeTool === "pointer" ? 1 : 0.4 }} 
       >
         <img src={puscica} />
       </button>
@@ -21,9 +22,22 @@ function OprVrstica({ activeTool, setActiveTool }) {
         T
       </button>
 
-      <button className="nalozi">
+      <button 
+      className="nalozi"
+      onClick={open}
+      >
         <img src={naloziBtn} />
       </button>
+    
+      {selectedId && (
+        <button 
+        onClick={() => zbrisi()}
+        className="zbrisiBtn"
+      >
+          <img src={brisiBtn} />
+      </button>
+)}
+
     </div>
   )
 }

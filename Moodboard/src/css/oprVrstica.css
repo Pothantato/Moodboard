@@ -38,3 +38,12 @@ button img {
     height: 24px;
     object-fit: contain;
 }
+
+.zbrisiBtn {
+  animation: fadeIn 0.2s ease;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}

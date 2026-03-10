@@ -2,7 +2,7 @@ import React, { useRef, useEffect } from 'react'
 import { Image, Transformer } from 'react-konva'
 import useImage from 'use-image'
 
-function SlikaComponent({ image, isSelected, onSelect, onUpdate }) {
+function SlikaComponent({ image, isSelected, onSelect, onUpdate, activeTool }) {
   const [loadedImage] = useImage(image.src)
 
   const imageRef = useRef()       
@@ -48,9 +48,13 @@ function SlikaComponent({ image, isSelected, onSelect, onUpdate }) {
         y={image.y}
         width={image.width}    
         height={image.height}  
-        draggable
-        onClick={onSelect}
-        onTap={onSelect}
+        draggable={activeTool !== "text"}
+        onClick={() => {
+          if (activeTool !== "text") onSelect()
+        }}
+        onTap={() => {
+          if (activeTool !== "text") onSelect()
+        }}
         onDragEnd={handleDragEnd}
         onTransformEnd={handleTransformEnd}
       />
