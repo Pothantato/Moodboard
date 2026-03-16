@@ -11,7 +11,7 @@ function SlikaComponent({ image, isSelected, onSelect, onUpdate, activeTool }) {
   useEffect(() => {
     if (isSelected) {
       transformerRef.current.nodes([imageRef.current])
-      transformerRef.current.getLayer().batchDraw()
+      transformerRef.current.getLayer().draw() //draw je konva method ki ukaže layerju naj se re-rendera
     }
   }, [isSelected])
 
@@ -25,10 +25,10 @@ function SlikaComponent({ image, isSelected, onSelect, onUpdate, activeTool }) {
   function handleTransformEnd() {
     const node = imageRef.current
 
-    const newWidth = node.width() * node.scaleX()
+    const newWidth = node.width() * node.scaleX() //const ne let ker je izračunano enkrat in ni vec reasigned v funkciji
     const newHeight = node.height() * node.scaleY()
 
-    node.scaleX(1)
+    node.scaleX(1) //rabi bit tako, ker konva upravlja s tem. Ko povecas sliko konva naredi node.scaleX npr. (2)
     node.scaleY(1)
 
     onUpdate({
@@ -48,7 +48,7 @@ function SlikaComponent({ image, isSelected, onSelect, onUpdate, activeTool }) {
         y={image.y}
         width={image.width}    
         height={image.height}  
-        draggable={activeTool !== "text"}
+        draggable={activeTool !== "text"} // !=="text" ne dovoli upravljanja s slikami ko imamo text tool aktiviran
         onClick={() => {
           if (activeTool !== "text") onSelect()
         }}
@@ -62,7 +62,7 @@ function SlikaComponent({ image, isSelected, onSelect, onUpdate, activeTool }) {
         <Transformer
           ref={transformerRef}
           boundBoxFunc={(oldBox, newBox) => {
-            if (newBox.width < 20 || newBox.height < 20) return oldBox
+            if (newBox.width < 20 || newBox.height < 20) return oldBox //ce je manj kot 20 ne dovoli spremembe
             return newBox
           }}
         />

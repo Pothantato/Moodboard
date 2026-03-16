@@ -33,13 +33,13 @@ function Board() {
 
   const { getRootProps, getInputProps, open} = useDropzone({
     onDrop,
-    noClick: true,
+    noClick: true, //nemors kar kliknit na kanvas prazen za vstavljanje nove slike
     accept: { 'image/*': [] }
   })
 
   function updateImage(id, newProps) {
     setImages(prev =>
-      prev.map(img => img.id === id ? { ...img, ...newProps } : img)
+      prev.map(img => img.id === id ? { ...img, ...newProps } : img) //ce se id ujema img podatki overwritajo newProps (ce neka stvar ni defined v id ostane od props)
     )
   }
 
@@ -50,9 +50,9 @@ function Board() {
   }
 
   function handleStageClick(e) {
-    const isStage = e.target === e.target.getStage()
+    const clickedStage = e.target === e.target.getStage()
 
-    if (activeTool === "text" && isStage) {
+    if (activeTool === "text" && clickedStage) {
       const pos = e.target.getStage().getPointerPosition()
       setTexts(prev => [...prev, {
         id: `txt-${Date.now()}-${Math.random()}`,
@@ -64,7 +64,7 @@ function Board() {
       return
     }
 
-    if (isStage) setSelectedId(null)
+    if (clickedStage) setSelectedId(null) //ce kliknes kanvas s pointer tool
   }
 
     function zbrisi() {
