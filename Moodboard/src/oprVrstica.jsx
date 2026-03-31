@@ -1,45 +1,74 @@
-import puscica from "/arrow-pointer.png"
-import naloziBtn from "/upload.png"
-import brisiBtn from "/trash-can.png"
+import puscica from "/puscica.png"
+import naloziBtn from "/oblak.png"
+import brisiBtn from "/smeti.png"
+import colourBtn from "/color.jpg"
+import tekstImg from "/tekst.png"
 import "./css/oprVrstica.css"
 
-function OprVrstica({ activeTool, setActiveTool, zbrisi, selectedId, open}) {
+function OprVrstica({ activeTool, setActiveTool, zbrisi, selectedId, open, texts, colours, showColours, setShowColours, changeColour}) {
   return (
+    <>
     <div className="vrstMain">
       <button
-        className="arrow"
+        className="glavniBtn"
         onClick={() => setActiveTool("pointer")}
         style={{ opacity: activeTool === "pointer" ? 1 : 0.4 }} 
       >
-        <img src={puscica} />
+        <img src={puscica}/>
       </button>
 
       <button
-        className="napis"
+        className="glavniBtn"
         onClick={() => setActiveTool("text")}
         style={{ opacity: activeTool === "text" ? 1 : 0.4 }}
       >
-        T
+        <img src={tekstImg}/>
       </button>
 
       <button 
-      className="nalozi"
+      className="glavniBtn"
       onClick={open}
       >
         <img src={naloziBtn} />
       </button>
     
       {selectedId && (
+        <>
+        <div className="divider"/>
         <button 
         onClick={() => zbrisi()}
-        className="zbrisiBtn"
+        className="zbrisiBtn glavniBtn"
       >
           <img src={brisiBtn} />
       </button>
+      </>
 )}
 
+      {selectedId && texts.some(txt => txt.id === selectedId) && ( //preveri ce selected item obstaja v texts array
+              <button 
+              onClick={() => setShowColours(!showColours)}
+              className="colourBtn glavniBtn"
+            >
+                <img src={colourBtn}/>
+            </button>
+      )}
     </div>
-  )
-}
+    {showColours && (
+        <div className="colourPicker">
+          {colours.map(colour => (
+        <button
+          key={colour}
+          onClick={() => {
+            changeColour(colour)
+            setShowColours(false)
+          }}
+          className="colourPickerBtn"
+          style={{ backgroundColor: colour }}
+        ></button>
+          ))}
+        </div>
+      )}
+  </>
+  )}
 
 export default OprVrstica

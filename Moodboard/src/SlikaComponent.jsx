@@ -1,6 +1,6 @@
 import React, { useRef, useEffect } from 'react'
 import { Image, Transformer } from 'react-konva'
-import useImage from 'use-image'
+import useImage from 'use-image' //da nam ni treba na roke pisati useEffect, sprozi izris slike ko je ta pripravljena
 
 function SlikaComponent({ image, isSelected, onSelect, onUpdate, activeTool }) {
   const [loadedImage] = useImage(image.src)

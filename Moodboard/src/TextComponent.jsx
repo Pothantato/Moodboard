@@ -88,6 +88,7 @@ function TextComponent({ textProps, isSelected, onSelect, onUpdate, setActiveToo
         onTap={onSelect}
         onDragEnd={handleDragEnd}
         onTransformEnd={handleTransformEnd}
+        fill={textProps.fill || "#000000"}
       />
 
       {isSelected && !isEditing && (

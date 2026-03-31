@@ -1,3 +1,5 @@
+@import url('https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100..900;1,100..900&display=swap');
+
 * {
   margin: 0;
   padding: 0;
@@ -10,3 +12,20 @@ html, body, #root {
   overflow: hidden;
 }
 
+.naslovDiv {
+    background: rgba(96, 214, 233, 1);
+    border: 2px solid black;
+    border-radius: 12px;
+    box-shadow: 3px 3px 0px black;
+
+    position: fixed;
+    top: 24px;
+    left: 50%;
+    transform: translateX(-50%);
+}
+
+h1 {
+  margin: 5px 15px;
+  text-align: center;
+  font-family: 'Roboto', sans-serif;
+}

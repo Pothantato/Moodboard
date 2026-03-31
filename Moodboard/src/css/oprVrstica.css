@@ -16,7 +16,7 @@
     transform: translateX(-50%);
 }
 
-button {
+.glavniBtn {
     width: 50px;
     height: 50px;
     overflow: hidden;
@@ -29,11 +29,11 @@ button {
     justify-content: center;
 }
 
-button:hover {
+.glavniBtn:hover {
     background: rgba(255, 255, 255, 0.555);
 }
 
-button img {
+.glavniBtn img {
     width: 24px;
     height: 24px;
     object-fit: contain;
@@ -46,4 +46,39 @@ button img {
 @keyframes fadeIn {
   from { opacity: 0; }
   to { opacity: 1; }
+}
+
+.divider {
+  width: 0;
+  height: 45px;
+  border-left: 2px dashed rgb(0, 0, 0);
+  animation: fadeIn 0.2s ease;
+}
+
+.colourBtn {
+  position: relative;  
+  animation: fadeIn 0.2s ease;
+}
+
+.colourPicker {
+  position: fixed;
+  bottom: 100px;  
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  gap: 8px;
+  padding: 8px;
+  background: rgba(241, 235, 221, 1);
+  border: 2px solid black;
+  border-radius: 12px;
+  box-shadow: 3px 3px 0px black;
+  animation: fadeIn 0.2s ease;
+}
+
+.colourPickerBtn {
+  width: 24px;
+  height: 24px;  
+  border-radius: 50%;
+  border: 2px solid black;
+  cursor: pointer;
 }

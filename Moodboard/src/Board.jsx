@@ -13,6 +13,19 @@ function Board() {
   const [images, setImages] = useState([])
   const [texts, setTexts] = useState([])
   const [selectedId, setSelectedId] = useState(null)
+  const [showColours, setShowColours] = useState(false)
+
+  const colours = ["#000000", "#c50000", "#17c500", "#0014c5", "#ffffff"]
+
+  function changeColour(colour) {
+    updateText(selectedId, {fill: colour})
+  }
+
+  useEffect(() => { //runna vsakic ko se selectedId spremeni
+  if (!selectedId || !texts.some(txt => txt.id === selectedId)) {
+    setShowColours(false) //barve izginejo kadar kliknemo dol s teksta
+  }
+}, [selectedId])
 
   const onDrop = useCallback((acceptedFiles) => {
     acceptedFiles.forEach((file) => {
@@ -125,6 +138,11 @@ function Board() {
       images={images}         
       setImages={setImages}
       open={open}
+      texts={texts}
+      showColours={showColours}
+      setShowColours={setShowColours}
+      colours={colours}
+      changeColour={changeColour}
       />
     </div>
   )
