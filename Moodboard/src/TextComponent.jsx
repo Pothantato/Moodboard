@@ -7,19 +7,19 @@ function TextComponent({ textProps, isSelected, onSelect, onUpdate, setActiveToo
   const transformerRef = useRef()
   const [isEditing, setIsEditing] = useState(textProps.text === "")
 
-  useEffect(() => {
-    if (isSelected) {
-      transformerRef.current.nodes([textareaRef.current])
-      transformerRef.current.getLayer().draw() //draw je konva method ki ukaže layerju naj se re-rendera
-    }
-  }, [isSelected])
-
   useEffect(() => {   // Ko se nov textbox mounta ga odpre
     if (isEditing) {
       setActiveTool("pointer")
       setTimeout(() => openTextarea(), 0)  //1 tick timeout da konva zrendera component
     }
   }, [])
+
+  useEffect(() => {
+    if (isSelected && !isEditing) {  //ne attacha transformerja medtem ko editas
+      transformerRef.current.nodes([textareaRef.current])
+      transformerRef.current.getLayer().draw() //draw je konva method ki ukaže layerju naj se re-rendera
+    }
+  }, [isSelected, isEditing])
 
   function openTextarea() {
     const node = textareaRef.current
@@ -79,21 +79,26 @@ function TextComponent({ textProps, isSelected, onSelect, onUpdate, setActiveToo
     <>
       <Text
         ref={textareaRef}
-        text={textProps.text} 
+        text={isEditing ? "" : textProps.text} //da ni viden dvojni text ko editas
         x={textProps.x}
         y={textProps.y}
         fontSize={textProps.fontSize}
         draggable
         onClick={onSelect}
+        onDblClick={ ()=>{
+          setIsEditing(true)
+          setTimeout(() => openTextarea(), 0)}}
         onTap={onSelect}
         onDragEnd={handleDragEnd}
         onTransformEnd={handleTransformEnd}
-        fill={textProps.fill || "#000000"}
+        fill={textProps.fill || "#000000"} 
+        fontFamily={textProps.fontFamily || "Roboto"}
       />
 
       {isSelected && !isEditing && (
         <Transformer
           ref={transformerRef}
+          enabledAnchors={['top-left', 'top-right', 'bottom-left', 'bottom-right']} //samo v kotih
           boundBoxFunc={(oldBox, newBox) => {
             if (newBox.width < 20) return oldBox //ce je manj kot 20 ne dovoli
             return newBox

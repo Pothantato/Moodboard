@@ -13,19 +13,29 @@ function Board() {
   const [images, setImages] = useState([])
   const [texts, setTexts] = useState([])
   const [selectedId, setSelectedId] = useState(null)
-  const [showColours, setShowColours] = useState(false)
 
+//barve
+  const [showColours, setShowColours] = useState(false)
   const colours = ["#000000", "#c50000", "#17c500", "#0014c5", "#ffffff"]
 
   function changeColour(colour) {
     updateText(selectedId, {fill: colour})
   }
 
-  useEffect(() => { //runna vsakic ko se selectedId spremeni
-  if (!selectedId || !texts.some(txt => txt.id === selectedId)) {
-    setShowColours(false) //barve izginejo kadar kliknemo dol s teksta
+//pisava
+  const [showFonts, setShowFonts] = useState(false)
+  const fonts = ["Roboto", "Courier New", "Barrio", "Grape Nuts", "Titan One"]
+
+  function changeFont(font) {
+    updateText(selectedId, {fontFamily: font})
   }
-}, [selectedId])
+
+  useEffect(() => { //runna vsakic ko se selectedId spremeni
+    if (!selectedId || !texts.some(txt => txt.id === selectedId)) {
+      setShowColours(false) //barve izginejo kadar kliknemo dol s teksta
+      setShowFonts(false)
+    }
+  }, [selectedId])
 
   const onDrop = useCallback((acceptedFiles) => {
     acceptedFiles.forEach((file) => {
@@ -139,13 +149,18 @@ function Board() {
       setImages={setImages}
       open={open}
       texts={texts}
+
       showColours={showColours}
       setShowColours={setShowColours}
       colours={colours}
       changeColour={changeColour}
+
+      fonts={fonts}
+      showFonts={showFonts}
+      setShowFonts={setShowFonts}
+      changeFont={changeFont}
       />
     </div>
-  )
-}
+  )}
 
 export default Board

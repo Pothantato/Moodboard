@@ -11,7 +11,7 @@ function SlikaComponent({ image, isSelected, onSelect, onUpdate, activeTool }) {
   useEffect(() => {
     if (isSelected) {
       transformerRef.current.nodes([imageRef.current])
-      transformerRef.current.getLayer().draw() //draw je konva method ki ukaže layerju naj se re-rendera
+      transformerRef.current.getLayer().draw() 
     }
   }, [isSelected])
 

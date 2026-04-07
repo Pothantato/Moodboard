@@ -43,7 +43,7 @@
   animation: fadeIn 0.2s ease;
 }
 
-@keyframes fadeIn {
+@keyframes fadeIn { /*kao za fade out*/
   from { opacity: 0; }
   to { opacity: 1; }
 }
@@ -55,13 +55,12 @@
   animation: fadeIn 0.2s ease;
 }
 
-.colourBtn {
-  position: relative;  
+.colourBtn { 
   animation: fadeIn 0.2s ease;
 }
 
 .colourPicker {
-  position: fixed;
+  position: fixed; /*fixed ne absolute ker parent nima relative, pac zdej je fixed na viewport*/
   bottom: 100px;  
   left: 50%;
   transform: translateX(-50%);
@@ -78,6 +77,37 @@
 .colourPickerBtn {
   width: 24px;
   height: 24px;  
+  border-radius: 50%;
+  border: 2px solid black;
+  cursor: pointer;
+}
+
+.fontBtn {
+  animation: fadeIn 0.2s ease;
+}
+
+.fontPicker{
+  position: fixed;
+  bottom: 100px;
+  left: 58%;
+  transform: translateX(-50%);
+
+  display: flex;
+  flex-direction: column;
+
+  gap: 8px;
+  padding: 8px;
+
+  background: rgba(241, 235, 221, 1);
+  border: 2px solid black;
+  border-radius: 12px;
+  box-shadow: 3px 3px 0px black;
+  animation: fadeIn 0.2s ease;
+}
+
+.fontPicerBtn {
+  width: 50px;
+  height: 24px;
   border-radius: 50%;
   border: 2px solid black;
   cursor: pointer;

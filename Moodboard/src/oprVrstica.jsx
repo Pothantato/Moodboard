@@ -5,8 +5,8 @@ import colourBtn from "/color.jpg"
 import tekstImg from "/tekst.png"
 import "./css/oprVrstica.css"
 
-function OprVrstica({ activeTool, setActiveTool, zbrisi, selectedId, open, texts, colours, showColours, setShowColours, changeColour}) {
-  return (
+function OprVrstica({ activeTool, setActiveTool, zbrisi, selectedId, open, texts, colours, showColours, setShowColours, changeColour, fonts, showFonts, setShowFonts, changeFont}) {
+  return ( 
     <>
     <div className="vrstMain">
       <button
@@ -45,12 +45,18 @@ function OprVrstica({ activeTool, setActiveTool, zbrisi, selectedId, open, texts
 )}
 
       {selectedId && texts.some(txt => txt.id === selectedId) && ( //preveri ce selected item obstaja v texts array
+            <>
               <button 
               onClick={() => setShowColours(!showColours)}
-              className="colourBtn glavniBtn"
-            >
+              className="colourBtn glavniBtn">
                 <img src={colourBtn}/>
-            </button>
+              </button>
+              <button 
+              className="fontBtn glavniBtn"
+              onClick={() => setShowFonts(!showFonts)}>
+                Aa
+              </button>
+            </>
       )}
     </div>
     {showColours && (
@@ -60,11 +66,24 @@ function OprVrstica({ activeTool, setActiveTool, zbrisi, selectedId, open, texts
           key={colour}
           onClick={() => {
             changeColour(colour)
-            setShowColours(false)
-          }}
+            setShowColours(false)}}
           className="colourPickerBtn"
           style={{ backgroundColor: colour }}
         ></button>
+          ))}
+        </div>
+      )}
+      {showFonts && (
+        <div className="fontPicker">
+          {fonts.map(font => (
+            <button
+            key={font}
+            onClick={()=>{
+              changeFont(font)
+              setShowFonts(false)}}
+              className="fontPickerBtn"
+              style={{fontFamily: font}}
+            >{font}</button>
           ))}
         </div>
       )}
