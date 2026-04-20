@@ -36,7 +36,7 @@ function Board() {
       setShowFonts(false)
     }
   }, [selectedId])
-
+ 
   const onDrop = useCallback((acceptedFiles) => {
     acceptedFiles.forEach((file) => {
       const reader = new FileReader()
@@ -60,7 +60,7 @@ function Board() {
     accept: { 'image/*': [] }
   })
 
-  function updateImage(id, newProps) {
+  function updateImage(id, newProps) { //helper funkcija da ni treba map + filter za posodobitev polozaja
     setImages(prev =>
       prev.map(img => img.id === id ? { ...img, ...newProps } : img) //ce se id ujema img podatki overwritajo newProps (ce neka stvar ni defined v id ostane od props)
     )

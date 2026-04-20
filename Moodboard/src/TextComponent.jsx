@@ -61,7 +61,7 @@ function TextComponent({ textProps, isSelected, onSelect, onUpdate, setActiveToo
   }
 
   function handleDragEnd(e) {
-    onUpdate({ x: e.target.x(), y: e.target.y() })
+    onUpdate({ x: e.target.x(), y: e.target.y() })//rabmo nujno manually updatat da state ostane synced
   }
 
   function handleTransformEnd() {

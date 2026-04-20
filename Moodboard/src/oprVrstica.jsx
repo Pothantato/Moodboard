@@ -1,8 +1,9 @@
 import puscica from "/puscica.png"
 import naloziBtn from "/oblak.png"
 import brisiBtn from "/smeti.png"
-import colourBtn from "/color.jpg"
+import colourBtn from "/barva.png"
 import tekstImg from "/tekst.png"
+import font from "/font.png"
 import "./css/oprVrstica.css"
 
 function OprVrstica({ activeTool, setActiveTool, zbrisi, selectedId, open, texts, colours, showColours, setShowColours, changeColour, fonts, showFonts, setShowFonts, changeFont}) {
@@ -54,7 +55,7 @@ function OprVrstica({ activeTool, setActiveTool, zbrisi, selectedId, open, texts
               <button 
               className="fontBtn glavniBtn"
               onClick={() => setShowFonts(!showFonts)}>
-                Aa
+                <img src={font}/>
               </button>
             </>
       )}

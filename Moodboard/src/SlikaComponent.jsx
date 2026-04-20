@@ -28,7 +28,7 @@ function SlikaComponent({ image, isSelected, onSelect, onUpdate, activeTool }) {
     const newWidth = node.width() * node.scaleX() //const ne let ker je izračunano enkrat in ni vec reasigned v funkciji
     const newHeight = node.height() * node.scaleY()
 
-    node.scaleX(1) //rabi bit tako, ker konva upravlja s tem. Ko povecas sliko konva naredi node.scaleX npr. (2)
+    node.scaleX(1) //rabi bit tako, ker konva upravlja s tem, mi pa hocemo sliko resizat sami, zato konva resize resetiramo
     node.scaleY(1)
 
     onUpdate({

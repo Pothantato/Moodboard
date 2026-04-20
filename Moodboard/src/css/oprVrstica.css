@@ -34,8 +34,8 @@
 }
 
 .glavniBtn img {
-    width: 24px;
-    height: 24px;
+    width: 34px;
+    height: 34px;
     object-fit: contain;
 }
 
@@ -105,10 +105,10 @@
   animation: fadeIn 0.2s ease;
 }
 
-.fontPicerBtn {
-  width: 50px;
-  height: 24px;
-  border-radius: 50%;
+.fontPickerBtn {
+  width: 100px;
+  height: 30px;
+  border-radius: 7px;
   border: 2px solid black;
   cursor: pointer;
 }

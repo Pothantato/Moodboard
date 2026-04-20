@@ -27,7 +27,7 @@ html, body, #root {
     transform: translateX(-50%);
 }
 
-h1 {
+.naslov {
   margin: 5px 15px;
   text-align: center;
   font-family: 'Roboto', sans-serif;
